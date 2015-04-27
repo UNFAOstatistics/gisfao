@@ -41,7 +41,7 @@ data(fao_world)
 plot(fao_world)
 ```
 
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
+![plot of chunk plot1](figure/plot1-1.png) 
 
 
 ### Subset the data
@@ -53,7 +53,7 @@ shape <- fao_world[which(fao_world[["RNE"]] == TRUE),]
 plot(shape)
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
+![plot of chunk plot2](figure/plot2-1.png) 
 
 
 ### Plot with ggplot2
@@ -77,7 +77,7 @@ p <- p + geom_polygon(data=map.df,aes(long,lat,group=group),
 p
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
+![plot of chunk plot3](figure/plot3-1.png) 
 
 ### Plot with ggplot2 using Robinson projection
 
@@ -100,7 +100,7 @@ p <- p + geom_polygon(data=map.df,aes(long,lat,group=group),
 p
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
+![plot of chunk plot4](figure/plot4-1.png) 
 
 
 ## Load and plot the point data
@@ -113,7 +113,7 @@ data(fao_world_centroids)
 plot(fao_world_centroids)
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
+![plot of chunk plot5](figure/plot5-1.png) 
 
 
 ### Subset the data
@@ -125,7 +125,7 @@ shape <- fao_world_centroids[which(fao_world_centroids[["RNE"]] == TRUE),]
 plot(shape)
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
+![plot of chunk plot6](figure/plot6-1.png) 
 
 ADM0_NAME
 ### Plot with ggplot2
@@ -146,7 +146,7 @@ p <- p + geom_point(data=points,aes(long,lat), color="Firebrick", size=3, color=
 p
 ```
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
+![plot of chunk plot7](figure/plot7-1.png) 
 
 ### Plot the polygons and points with ggplot2 using Robinson projection
 
@@ -177,5 +177,5 @@ p <- p + geom_text(data=points.df,aes(long,lat,label=ADM0_NAME), color="Dim Grey
 p
 ```
 
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
+![plot of chunk plot8](figure/plot8-1.png) 
 

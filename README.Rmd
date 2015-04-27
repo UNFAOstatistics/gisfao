@@ -33,7 +33,7 @@ devtools::install_github('muuankarski/gisfao')
 ## Load and plot the polygon data
 
 
-```{r}
+```{r plot1}
 library(sp)
 data(fao_world)
 plot(fao_world)
@@ -43,7 +43,7 @@ plot(fao_world)
 ### Subset the data
 
 
-```{r, eval=TRUE}
+```{r plot2}
 shape <- fao_world[which(fao_world[["RNE"]] == TRUE),]
 plot(shape)
 ```
@@ -52,7 +52,7 @@ plot(shape)
 ### Plot with ggplot2
 
 
-```{r, eval=TRUE}
+```{r plot3}
 shape <- fao_world[which(fao_world[["RNE"]] == TRUE),]
 library(ggplot2)
 map.df <- fortify(shape)
@@ -65,7 +65,7 @@ p
 
 ### Plot with ggplot2 using Robinson projection
 
-```{r}
+```{r plot4}
 library(rgdal)
 shape <- spTransform(fao_world, CRS("+proj=robin"))
 library(ggplot2)
@@ -81,7 +81,7 @@ p
 ## Load and plot the point data
 
 
-```{r}
+```{r plot5}
 library(sp)
 data(fao_world_centroids)
 plot(fao_world_centroids)
@@ -91,7 +91,7 @@ plot(fao_world_centroids)
 ### Subset the data
 
 
-```{r, eval=TRUE}
+```{r plot6}
 shape <- fao_world_centroids[which(fao_world_centroids[["RNE"]] == TRUE),]
 plot(shape)
 ```
@@ -100,7 +100,7 @@ ADM0_NAME
 ### Plot with ggplot2
 
 
-```{r, eval=TRUE}
+```{r plot7}
 shape <- fao_world_centroids[which(fao_world_centroids[["RNE"]] == TRUE),]
 # fortify the SpatialPointsDataFrame
 points <- cbind(coordinates(shape), shape@data)
@@ -116,7 +116,7 @@ p
 
 ### Plot the polygons and points with ggplot2 using Robinson projection
 
-```{r}
+```{r plot8}
 library(rgdal)
 # Set new robinson projection for both data
 shape <- spTransform(fao_world, CRS("+proj=robin"))

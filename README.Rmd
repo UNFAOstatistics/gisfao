@@ -1,11 +1,6 @@
----
-title: "gisfao-package"
-author: "Markus Kainu"
-date: "27 April 2015"
-output: html_document
----
+# gisfao
 
-`faogis` package provides you with the up-to-data shapefiles that are compatible with [FAOSTAT](http://faostat.fao.org/) country codes (`FAO_CODE`). Also, shapefiles data slots have a dummy variable for each FAO regions which you can subset the shapefile with. Fao regions are:
+`gisfao` package provides you with the up-to-data shapefiles that are compatible with [FAOSTAT](http://faostat.fao.org/) country codes (`FAO_CODE`). Also, shapefiles data slots have a dummy variable for each FAO regions which you can subset the shapefile with. Fao regions are:
 
 - RAF (Africa)
 - LAC (Latin America and the Caribbean)
@@ -33,105 +28,14 @@ devtools::install_github('muuankarski/gisfao')
 ## Load and plot the polygon data
 
 
-```{r plot1}
+```{r plot01}
 library(sp)
 data(fao_world)
 plot(fao_world)
-```
 
-
-### Subset the data
-
-
-```{r plot2}
-shape <- fao_world[which(fao_world[["RNE"]] == TRUE),]
-plot(shape)
-```
-
-
-### Plot with ggplot2
-
-
-```{r plot3}
-shape <- fao_world[which(fao_world[["RNE"]] == TRUE),]
-library(ggplot2)
-map.df <- fortify(shape)
-
-p <- ggplot()
-p <- p + geom_polygon(data=map.df,aes(long,lat,group=group), 
-                      fill="Firebrick", color="white", size=.5, alpha=.5)
-p
-```
-
-### Plot with ggplot2 using Robinson projection
-
-```{r plot4}
-library(rgdal)
-shape <- spTransform(fao_world, CRS("+proj=robin"))
-library(ggplot2)
-map.df <- fortify(shape)
-
-p <- ggplot()
-p <- p + geom_polygon(data=map.df,aes(long,lat,group=group), 
-                      fill="Firebrick", color="white", size=.5, alpha=.5)
-p
-```
-
-
-## Load and plot the point data
-
-
-```{r plot5}
-library(sp)
 data(fao_world_centroids)
 plot(fao_world_centroids)
+
+data(graticule)
+plot(graticule)
 ```
-
-
-### Subset the data
-
-
-```{r plot6}
-shape <- fao_world_centroids[which(fao_world_centroids[["RNE"]] == TRUE),]
-plot(shape)
-```
-
-ADM0_NAME
-### Plot with ggplot2
-
-
-```{r plot7}
-shape <- fao_world_centroids[which(fao_world_centroids[["RNE"]] == TRUE),]
-# fortify the SpatialPointsDataFrame
-points <- cbind(coordinates(shape), shape@data)
-
-names(points)[names(points)=="x"] <- "long"
-names(points)[names(points)=="y"] <- "lat"
-
-library(ggplot2)
-p <- ggplot()
-p <- p + geom_point(data=points,aes(long,lat), color="Firebrick", size=3, color="Firebrick")
-p
-```
-
-### Plot the polygons and points with ggplot2 using Robinson projection
-
-```{r plot8}
-library(rgdal)
-# Set new robinson projection for both data
-shape <- spTransform(fao_world, CRS("+proj=robin"))
-points <- spTransform(fao_world_centroids, CRS("+proj=robin"))
-# Fortify both data
-map.df <- fortify(shape)
-points.df <- cbind(coordinates(points), points@data)
-names(points.df)[names(points.df)=="x"] <- "long"
-names(points.df)[names(points.df)=="y"] <- "lat"
-
-p <- ggplot()
-p <- p + geom_polygon(data=map.df,aes(long,lat,group=group), 
-                      fill="Firebrick", color="white", size=.5, alpha=.5)
-p <- p + geom_point(data=points.df,aes(long,lat), color="Firebrick", size=3, color="Firebrick")
-p <- p + geom_text(data=points.df,aes(long,lat,label=ADM0_NAME), color="Dim Grey", size=3)
-p
-```
-

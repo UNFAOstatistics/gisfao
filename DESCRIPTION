@@ -10,3 +10,5 @@ License: BSD_2_clause + file LICENSE
 LazyData: TRUE
 URL: https://github.com/muuankarski/gisfao
 Imports: sp
+Suggests: knitr
+VignetteBuilder: knitr

@@ -1,0 +1,12 @@
+Package: gisfao
+Type: Package
+Title: Food and Agriculture Organisation of the United Nations (FAO) GIS R tools
+Version: 0.1
+Date: 2015-04-25
+Author: Markus Kainu
+Maintainer: Markus Kainu <markus.kainu@fao.org>
+Description: Load the FAOSTAT compatible shapefile
+License: BSD_2_clause + file LICENSE
+LazyData: TRUE
+URL: https://github.com/muuankarski/gisfao
+Imports: sp

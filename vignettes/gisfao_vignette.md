@@ -52,21 +52,21 @@ data(fao_world)
 plot(fao_world)
 ```
 
-![plot of chunk all_plots](figure/all_plots-1.png) 
+![plot of chunk all_plots](../figure/all_plots-1.png) 
 
 ```r
 data(fao_world_centroids)
 plot(fao_world_centroids)
 ```
 
-![plot of chunk all_plots](figure/all_plots-2.png) 
+![plot of chunk all_plots](../figure/all_plots-2.png) 
 
 ```r
 data(graticule)
 plot(graticule)
 ```
 
-![plot of chunk all_plots](figure/all_plots-3.png) 
+![plot of chunk all_plots](../figure/all_plots-3.png) 
 
 
 ### Subset the data
@@ -78,14 +78,14 @@ shape <- fao_world[which(fao_world[["RNE"]] == TRUE),]
 plot(shape)
 ```
 
-![Regional maps](figure/plot2-1.png) 
+![Regional maps](../figure/plot2-1.png) 
 
 ```r
 shape <- fao_world[which(fao_world[["LAC"]] == TRUE),]
 plot(shape)
 ```
 
-![Regional maps](figure/plot2-2.png) 
+![Regional maps](../figure/plot2-2.png) 
 
 
 ## Plot a World Map in ggplot2 using Robinson projection
@@ -105,7 +105,7 @@ p <- p + geom_polygon(data=map.df,aes(long,lat,group=group),
 p
 ```
 
-![plot of chunk world_plot1](figure/world_plot1-1.png) 
+![plot of chunk world_plot1](../figure/world_plot1-1.png) 
 
 
 ### Add the graticule below the landmass
@@ -127,7 +127,7 @@ p <- p + theme_minimal()
 p
 ```
 
-![plot of chunk world_plot2](figure/world_plot2-1.png) 
+![plot of chunk world_plot2](../figure/world_plot2-1.png) 
 
 
 ### Add the polygon centroids and country names
@@ -147,7 +147,7 @@ p <- p + geom_text(data=points.df,aes(long,lat,label=ADM0_NAME), color="Dim Grey
 p
 ```
 
-![plot of chunk world_plot3](figure/world_plot3-1.png) 
+![plot of chunk world_plot3](../figure/world_plot3-1.png) 
 
 
 ## Plot a Latin America and the Caribbean map
@@ -168,7 +168,7 @@ p <- p + geom_polygon(data=map.df,aes(long,lat,group=group),
 p
 ```
 
-![plot of chunk reg_plot1](figure/reg_plot1-1.png) 
+![plot of chunk reg_plot1](../figure/reg_plot1-1.png) 
 
 
 ### Add the graticule below the landmass
@@ -194,7 +194,7 @@ p <- p + theme_minimal()
 p
 ```
 
-![plot of chunk reg_plot2](figure/reg_plot2-1.png) 
+![plot of chunk reg_plot2](../figure/reg_plot2-1.png) 
 
 
 ### Add the polygon centroids
@@ -218,6 +218,6 @@ p <- p + geom_text(data=points.df,aes(long,lat,label=ADM0_NAME), color="Dim Grey
 p
 ```
 
-![plot of chunk reg_plot3](figure/reg_plot3-1.png) 
+![plot of chunk reg_plot3](../figure/reg_plot3-1.png) 
 
 

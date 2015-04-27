@@ -37,16 +37,16 @@ plot(shape)
 
 
 ```{r, eval=TRUE}
-africa <- load_fao_shape(region = "RAF")
-plot(africa)
+RNE <- load_fao_shape(region = "RNE")
+plot(RNE)
 ```
 
 or 
 
 ```{r, eval=TRUE}
 world <- load_fao_shape(region = "world")
-africa <- fao_world[which(fao_world[["RAF"]] == TRUE),]
-plot(africa)
+RNE <- fao_world[which(fao_world[["RNE"]] == TRUE),]
+plot(RNE)
 ```
 
 

@@ -42,8 +42,8 @@ plot(shape)
 
 
 ```r
-africa <- load_fao_shape(region = "RAF")
-plot(africa)
+RNE <- load_fao_shape(region = "RNE")
+plot(RNE)
 ```
 
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
@@ -53,8 +53,8 @@ or
 
 ```r
 world <- load_fao_shape(region = "world")
-africa <- fao_world[which(fao_world[["RAF"]] == TRUE),]
-plot(africa)
+RNE <- fao_world[which(fao_world[["RNE"]] == TRUE),]
+plot(RNE)
 ```
 
 ![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 

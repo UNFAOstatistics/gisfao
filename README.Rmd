@@ -1,5 +1,7 @@
 # gisfao
 
+**See vignette at <https://github.com/muuankarski/gisfao/blob/master/vignettes/gisfao_vignette.md> for more detailed examples.**
+
 `gisfao` package provides you with the up-to-data shapefiles that are compatible with [FAOSTAT](http://faostat.fao.org/) country codes (`FAO_CODE`). Also, shapefiles data slots have a dummy variable for each FAO regions which you can subset the shapefile with. Fao regions are:
 
 - RAF (Africa)

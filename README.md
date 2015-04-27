@@ -1,6 +1,5 @@
 # gisfao
 
-**See vignette at <https://github.com/muuankarski/gisfao/blob/master/vignettes/gisfao_vignette.md> for more detailed examples.**
 
 `gisfao` package provides you with the up-to-data shapefiles that are compatible with [FAOSTAT](http://faostat.fao.org/) country codes (`FAO_CODE`). Also, shapefiles data slots have a dummy variable for each FAO regions which you can subset the shapefile with. Fao regions are:
 
@@ -14,6 +13,8 @@ Shapefiles included
 
 1. **World Country Polygons** `fao_world` - class `SpatialPolygonDataFRame`
 2. **World Country Polygons Centroids** `fao_world_centroids` - class `SpatialPointDataFRame`
+
+See vignette at **<https://github.com/muuankarski/gisfao/blob/master/vignettes/gisfao_vignette.md>** for more detailed examples.
 
 <!--
 There are no function  only one function `load_fao_shape` that requires one attribute `region` that accept the fao regions as values. Default is `world` that returns the shapefile as whole.

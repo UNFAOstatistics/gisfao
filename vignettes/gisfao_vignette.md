@@ -1,7 +1,7 @@
 ---
 title: "gisfao-package"
 author: "Markus Kainu"
-date: "2015-04-27"
+date: "2015-04-28"
 output: 
     rmarkdown::html_vignette:
             fig_caption: yes
@@ -87,6 +87,7 @@ plot(shape)
 
 ![Regional maps](../figure/plot2-2.png) 
 
+****
 
 ## Plot a World Map in ggplot2 using Robinson projection
 
@@ -149,6 +150,7 @@ p
 
 ![plot of chunk world_plot3](../figure/world_plot3-1.png) 
 
+****
 
 ## Plot a Latin America and the Caribbean map
 
@@ -220,4 +222,169 @@ p
 
 ![plot of chunk reg_plot3](../figure/reg_plot3-1.png) 
 
+
+****
+
+## Choropleth map using FAOSTAT data
+
+Download the data from FAOSTAT using [`FAOSTAT`]()-package
+
+
+
+```r
+require(devtools)
+if (!"FAOSTAT" %in% installed.packages()) {
+  install_github(username = "mkao006", repo = "FAOSTATpackage",
+                 ref = "master", subdir = "FAOSTAT")
+}
+require(FAOSTAT)
+# Download data
+dat <- getFAOtoSYB(domainCode = "QC", 
+                   elementCode = 5510,
+                   itemCode = 486,
+                   yearRange = 2012:2012)
+```
+
+```
+## 
+## 
+##                  ----------------------------------------                 
+##                  ** FAOSTAT Data Download (1 in Total) **                 
+##                  ----------------------------------------                 
+## 
+## (1): Downloading variable QC_486_5510 ... 
+## NOTE: Multiple China detected in 'Value' sanitization is performed
+## OK
+## 
+##  Number of variables successfully downloaded: 1 out of 1
+```
+
+```r
+dat <- dat[["entity"]]
+```
+
+Create a `categories`-function for setting breaks and polishing the labels.
+
+
+```r
+# Creating a custom function for creating the breaks and makeing them look neat
+categories <- function(x, cat=5) {
+  
+  library(stringr)
+  levs <- as.data.frame(as.character(levels(cut_number(x, cat))))
+  names(levs) <- "orig"
+  levs$mod <- str_replace_all(levs$orig, "\\[", "")
+  levs$mod <- str_replace_all(levs$mod, "\\]", "")
+  levs$mod <- str_replace_all(levs$mod, "\\(", "")
+  levs$lower <- gsub(",.*$","", levs$mod)
+  levs$upper <- gsub(".*,","", levs$mod)
+  
+  levs$lower <- factor(levs$lower)
+  levs$lower <- round(as.numeric(levels(levs$lower))[levs$lower],0)
+  
+  levs$upper <- factor(levs$upper)
+  levs$upper <- round(as.numeric(levels(levs$upper))[levs$upper],0)
+  
+  levs$labs <- paste(levs$lower,levs$upper, sep=" - ")
+  
+  labs <- as.character(c(levs$labs))
+  y <- cut_number(x, cat, right = FALSE, labels = labs)
+  y <- as.character(y)
+  y[is.na(y)] <- "No Data"
+  y <- factor(y, levels=c("No Data",labs[1:cat]))
+}
+```
+
+
+Make the shape and the attribute data of same lenght and merge them together with `spCbind`, and apply the `categories`-function to banana production quantities for creating the categories for plotting.
+
+
+```r
+# set Robinson projection
+shape <- spTransform(fao_world, CRS("+proj=robin"))
+dim(shape)
+```
+
+```
+## [1] 187  18
+```
+
+```r
+dim(dat)
+```
+
+```
+## [1] 137   3
+```
+
+```r
+# Spatial dataframe has 187 rows and attribute data 137.  We need to make
+# attribute data to have similar number of rows
+FAOST_CODE <- as.character(shape$FAO_CODE)
+VarX <- rep(NA, 187)
+df.d <- data.frame(FAOST_CODE, VarX)
+# then we shall merge this with Eurostat data.frame
+dat2 <- merge(dat, df.d, by.x = "FAOST_CODE", all.y = TRUE)
+## merge this manipulated attribute data with the spatialpolygondataframe
+## rownames
+row.names(dat2) <- dat2$FAOST_CODE
+row.names(shape) <- as.character(shape$FAO_CODE)
+## order data
+dat2 <- dat2[order(row.names(dat2)), ]
+shape <- shape[order(row.names(shape)), ]
+## join
+library(maptools)
+shape2 <- spCbind(shape, dat2)
+# Apply the categories-function
+shape2$value_cat <- categories(shape2$QC_486_5510)
+```
+
+Fortify the shapefile for ggplot2-plotting
+
+
+```r
+# Fortify the shape with the attribute data
+shape2$id <- rownames(shape2@data)
+map.points <- fortify(shape2, region = "id")
+map.df <- merge(map.points, shape2, by = "id")
+```
+
+Create the plot with Robinson projection and underlying grid. See the [Color palette](http://colorbrewer2.org/?type=sequential&scheme=BuGn&n=5)
+
+
+```r
+library(scales)
+library(grid)
+# graticule
+grat_robin <- spTransform(graticule, CRS("+proj=robin"))  # reproject graticule
+grat_df_robin <- fortify(grat_robin)
+# Create the plot
+p <- ggplot(data=map.df, aes(long,lat,group=group))
+# Grey for the non-data regions
+p <- p + geom_path(data = grat_df_robin, aes(long, lat, group = group, fill = NULL), linetype = "solid", color = "Dim Grey", size = .5)
+p <- p + geom_polygon(data = map.df, aes(long,lat),fill=NA,colour="white",size = .7)
+p <- p + geom_polygon(aes(fill = value_cat),colour="white",size=.2)
+p <- p + scale_fill_manual(values=c("Dim Grey","#edf8fb","#b2e2e2","#66c2a4","#2ca25f","#006d2c")) 
+p <- p + theme(legend.position = c(0.13,0.40), 
+                          legend.justification=c(0,0),
+                          legend.key.size=unit(6,'mm'),
+                          legend.direction = "vertical",
+                          legend.background=element_rect(colour=NA, fill=alpha("white", 2/3)),
+                          legend.text=element_text(size=12), 
+                          legend.title=element_text(size=12), 
+                          title=element_text(size=16), 
+                          panel.background = element_blank(), 
+                          plot.background = element_blank(),
+                          panel.grid.minor = element_blank(),
+                          panel.grid.major = element_blank(),
+                          axis.text = element_blank(), 
+                          axis.title = element_blank(), 
+                          axis.ticks = element_blank())
+p <- p + guides(fill = guide_legend(title = "tonnes",
+                                     title.position = "top", 
+                                     title.hjust=0))
+p
+```
+
+![plot of chunk choro5](../figure/choro5-1.png) 
 

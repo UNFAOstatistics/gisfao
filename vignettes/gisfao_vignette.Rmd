@@ -296,7 +296,7 @@ p <- p + geom_path(data = grat_df_robin, aes(long, lat, group = group, fill = NU
 p <- p + geom_polygon(data = map.df, aes(long,lat),fill=NA,colour="white",size = .7)
 p <- p + geom_polygon(aes(fill = value_cat),colour="white",size=.2)
 p <- p + scale_fill_manual(values=c("Dim Grey","#edf8fb","#b2e2e2","#66c2a4","#2ca25f","#006d2c")) 
-p <- p + theme(legend.position = c(0.13,0.40), 
+p <- p + theme(legend.position = c(0.05,0.05), 
                           legend.justification=c(0,0),
                           legend.key.size=unit(6,'mm'),
                           legend.direction = "vertical",

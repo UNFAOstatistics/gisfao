@@ -32,6 +32,7 @@ devtools::install_github('muuankarski/gisfao')
 
 
 ```{r plot01}
+library(gisfao)
 library(sp)
 data(fao_world)
 plot(fao_world)

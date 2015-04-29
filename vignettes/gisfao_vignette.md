@@ -1,7 +1,7 @@
 ---
 title: "gisfao-package"
 author: "Markus Kainu"
-date: "2015-04-28"
+date: "2015-04-29"
 output: 
     rmarkdown::html_vignette:
             fig_caption: yes
@@ -16,7 +16,7 @@ vignette: >
 
 
 
-`faogis` package provides you with the up-to-data shapefiles that are compatible with [FAOSTAT](http://faostat.fao.org/) country codes (`FAO_CODE`). Also, shapefiles data slots have a dummy variable for each FAO regions which you can subset the shapefile with. Fao regions are:
+`faogis` package provides you with the up-to-data shapefiles that are compatible with [FAOSTAT](http://faostat.fao.org/) country codes (`FAOST_CODE`). Also, shapefiles data slots have a dummy variable for each FAO regions which you can subset the shapefile with. Fao regions are:
 
 - RAF (Africa)
 - LAC (Latin America and the Caribbean)
@@ -306,7 +306,7 @@ dim(shape)
 ```
 
 ```
-## [1] 187  18
+## [1] 187  19
 ```
 
 ```r
@@ -320,7 +320,7 @@ dim(dat)
 ```r
 # Spatial dataframe has 187 rows and attribute data 137.  We need to make
 # attribute data to have similar number of rows
-FAOST_CODE <- as.character(shape$FAO_CODE)
+FAOST_CODE <- as.character(shape$FAOST_CODE)
 VarX <- rep(NA, 187)
 df.d <- data.frame(FAOST_CODE, VarX)
 # then we shall merge this with Eurostat data.frame

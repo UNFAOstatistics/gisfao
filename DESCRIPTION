@@ -1,7 +1,7 @@
 Package: gisfao
 Type: Package
-Title: Food and Agriculture Organisation of the United Nations (FAO) GIS R tools
-Version: 0.1
+Title: UNFAO GIS R tools
+Version: 0.1.1
 Date: 2015-04-25
 Author: Markus Kainu
 Maintainer: Markus Kainu <markus.kainu@fao.org>

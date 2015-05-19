@@ -40,7 +40,7 @@ There are no function  only one function `load_fao_shape` that requires one attr
 ## Install packages
 
 ```{r, eval=FALSE}
-devtools::install_github('muuankarski/gisfao')
+devtools::install_github('UNFAOstatistics/gisfao')
 ```
 
 

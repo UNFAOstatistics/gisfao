@@ -1,7 +1,7 @@
 ---
 title: "gisfao-package"
 author: "Markus Kainu"
-date: "2015-04-29"
+date: "2015-07-20"
 output: 
     rmarkdown::html_vignette:
             fig_caption: yes
@@ -38,7 +38,7 @@ There are no function  only one function `load_fao_shape` that requires one attr
 
 
 ```r
-devtools::install_github('muuankarski/gisfao')
+devtools::install_github('UNFAOstatistics/gisfao')
 ```
 
 
@@ -252,7 +252,8 @@ dat <- getFAOtoSYB(domainCode = "QC",
 ##                  ** FAOSTAT Data Download (1 in Total) **                 
 ##                  ----------------------------------------                 
 ## 
-## (1): Downloading variable QC_486_5510 ... 
+## (1): Downloading variable QC_486_5510 ... [1] 1
+## 
 ## NOTE: Multiple China detected in 'Value' sanitization is performed
 ## OK
 ## 

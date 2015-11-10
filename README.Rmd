@@ -14,7 +14,12 @@ Shapefiles included
 1. **World Country Polygons** `fao_world` - class `SpatialPolygonDataFRame`
 2. **World Country Polygons Centroids** `fao_world_centroids` - class `SpatialPointDataFRame`
 
-See vignette at **<https://github.com/UNFAOstatistics/gisfao/blob/master/vignettes/gisfao_vignette.md>** for more detailed examples.
+See vignettes at 
+
+- <https://github.com/UNFAOstatistics/gisfao/blob/master/vignettes/gisfao_vignette.md>
+- <https://github.com/UNFAOstatistics/gisfao/blob/master/vignettes/gisfao_vignette_faostat.md>
+
+for more detailed examples.
 
 <!--
 There are no function  only one function `load_fao_shape` that requires one attribute `region` that accept the fao regions as values. Default is `world` that returns the shapefile as whole.

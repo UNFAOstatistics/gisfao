@@ -1,0 +1,146 @@
+---
+title: "Using gisfao-package with FAOSTAT data - a manual approach"
+author: "Markus Kainu"
+date: "`r Sys.Date()`"
+output: 
+    rmarkdown::html_vignette:
+            fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+```{r, echo=FALSE}
+library(knitr)
+opts_chunk$set(list(echo=TRUE,eval=TRUE,cache=FALSE,warning=FALSE,message=FALSE,fig.height=6,fig.width=8,fig.path = "../figure/"))
+```
+
+# Intro
+
+In this experiment we will download .csv data from FAOSTAT and create a simple choropleth maps using ggplot2.
+
+
+# Downloading data from FAOSTAT
+
+In this example we are not using the FAOSTAT API for downloading the data, but we download the [Live Animals data through bulk download](http://faostat3.fao.org/download/Q/QA/E) link as below.
+
+```{r data_download_and_processing, cache=TRUE}
+download.file("http://faostat3.fao.org/faostat-bulkdownloads/Production_Livestock_E_All_Data_(Norm).zip",destfile = "bulk.zip")
+unzip("bulk.zip")
+dat <- read.csv("Production_Livestock_E_All_Data_(Norm).csv", stringsAsFactors = FALSE)
+```
+
+Once downloaded we use the `dplyr`-package to subset the number of cattle for years 2000, 2005 and 2010
+
+```{r subsetting_data}
+library(dplyr)
+d <- dat %>% 
+  filter(Item == "Cattle", Unit == "Head", Year %in% c(2000,2005,2010)) %>% # filtering the rows
+  select(Country.Code,Year,Value) %>% # selecting the columns
+  rename(FAOST_CODE = Country.Code) # renaming the var
+knitr::kable(head(d)) # showing the first 6 rows of the data
+```
+
+Then we classify the data manually also using `dplyr`-package
+
+```{r manually_classifying}
+library(dplyr)
+d <- d %>% mutate(cat_man = cut(Value, breaks=c(0, 97040, 1452000, 9149000, 1453000000), include.lowest=TRUE), # cut manually
+                  cat_int = ggplot2::cut_interval(Value,n = 5), # cut into 5 equally interval
+                  cat_num = ggplot2::cut_number(Value, n = 5)) # cut into 
+knitr::kable(head(d)) # showing the first 6 rows of the data
+```
+
+
+# Manipulating the spatial data
+
+For simplicity we will first fortify the `SpatialPolygonDataFrame` into `data.frame` and merge it with the attribute data from FAOSTAT only thereafter. **However, I strongly advice to use approach in the `gisfao_vignette.Rmd` that uses the proper spatial data types and methods. It is good to remember tha you can't go back into spatial data classes from normal data.frame meaning that the following operations are irreversible!**
+
+
+```{r world_plot1}
+library(gisfao)
+library(rgdal)
+library(ggplot2)
+shape <- spTransform(fao_world, CRS("+proj=robin"))
+map.df <- fortify(shape)
+```
+
+
+Merge the map.df with the FAOSTAT data
+
+```{r merge}
+map.df <- merge(map.df,d,by.x="id", by.y="FAOST_CODE",all=TRUE)
+map.df <- arrange(map.df, order)
+```
+
+
+# Create maps
+
+## Using each of three category variables and year 2010
+
+Using `cut`
+
+```{r map1}
+
+plot_data <- map.df %>% filter(Year == 2010)
+
+p <- ggplot()
+p <- p + geom_polygon(data=map.df,aes(long,lat,group=group,fill=cat_man), 
+                      color="white", size=.5)
+p <- p + theme_minimal()
+p
+```
+
+Using `cut_interval`
+
+```{r map2}
+plot_data <- map.df %>% filter(Year == 2010)
+
+p <- ggplot()
+p <- p + geom_polygon(data=map.df,aes(long,lat,group=group,fill=cat_int), 
+                      color="white", size=.5)
+p <- p + theme_minimal()
+p
+```
+
+Using `cut_number`
+
+```{r map3}
+plot_data <- map.df %>% filter(Year == 2010)
+
+p <- ggplot()
+p <- p + geom_polygon(data=map.df,aes(long,lat,group=group,fill=cat_num), 
+                      color="white", size=.5)
+p <- p + theme_minimal()
+p
+```
+
+
+## Looping over the three years
+
+```{r map4}
+
+for (y in c(2000,2005,2010)){
+  plot_data <- map.df %>% filter(Year == 2010)
+
+  p <- ggplot()
+  p <- p + geom_polygon(data=map.df,aes(long,lat,group=group,fill=cat_man), 
+                      color="white", size=.5)
+  p <- p + theme_minimal()
+  p <- p + labs(title = y)
+  print(p)
+}
+
+```
+
+
+# Further references
+
+For cleaning up the labels etc. and styling your maps you can have a look at these scripts from Yearbook process:
+
+- [map_categories.R](https://github.com/UNFAOstatistics/regional15/blob/master/input/code/plot/map_categories.R) 
+- [create_map_here.R](https://github.com/UNFAOstatistics/regional15/blob/master/input/code/plot/create_map_here.R)
+
+

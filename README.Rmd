@@ -17,7 +17,7 @@ Shapefiles included
 See vignettes at 
 
 - <https://github.com/UNFAOstatistics/gisfao/blob/master/vignettes/gisfao_vignette.md>
-- <https://github.com/UNFAOstatistics/gisfao/blob/master/vignettes/gisfao_vignette_faostat.md>
+- <https://github.com/UNFAOstatistics/gisfao/blob/master/vignettes/gisfao_faostat_vignette.md>
 
 for more detailed examples.
 
